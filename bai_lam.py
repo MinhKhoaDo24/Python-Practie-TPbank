@@ -235,7 +235,7 @@ def run_pipeline():
     ]
     df_ket_qua = df_report[cols_16].copy()
 
-    out_ket_qua = os.path.join(out_dir, "KhoaDM2_ket_qua.csv")
+    out_ket_qua = os.path.join(out_dir, "KhoaDM2_CTV_ket_qua.csv")
     df_ket_qua.to_csv(out_ket_qua, index=False, float_format="%.2f", encoding="utf-8")
     print(f"[+] Đã ghi ket_qua.csv ({len(df_ket_qua)} dòng) tại: {out_ket_qua}")
 
