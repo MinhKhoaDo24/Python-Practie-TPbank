@@ -6,19 +6,23 @@ import numpy as np
 
 def run_pipeline():
     # Xác định đường dẫn thư mục dữ liệu và đầu ra
-    # Hỗ trợ chạy từ thư mục gốc dự án hoặc bên trong thư mục Python
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    workspace_dir = os.path.dirname(current_dir)
+    current_dir  = os.path.dirname(os.path.abspath(__file__)) 
+    parent_dir   = os.path.dirname(current_dir)                  
+    grandparent_dir = os.path.dirname(parent_dir)                
 
-    # Tìm thư mục du_lieu
-    if os.path.exists(os.path.join(current_dir, "du_lieu")):
-        data_dir = os.path.join(current_dir, "du_lieu")
-    elif os.path.exists(os.path.join(workspace_dir, "du_lieu")):
-        data_dir = os.path.join(workspace_dir, "du_lieu")
-    elif os.path.exists("du_lieu"):
-        data_dir = "du_lieu"
-    else:
-        raise FileNotFoundError("Không tìm thấy thư mục 'du_lieu'!")
+    # Tìm thư mục du_lieu theo thứ tự ưu tiên
+    _candidates = [
+        os.path.join(grandparent_dir, "du_lieu"),  
+        os.path.join(parent_dir,      "du_lieu"),  
+        os.path.join(current_dir,     "du_lieu"),  
+        os.path.abspath("du_lieu"),                
+    ]
+    data_dir = next((p for p in _candidates if os.path.exists(p)), None)
+    if data_dir is None:
+        raise FileNotFoundError(
+            "Không tìm thấy thư mục 'du_lieu'!\n"
+            f"Đã tìm trong:\n" + "\n".join(f"  - {p}" for p in _candidates)
+        )
 
     # Thư mục xuất kết quả
     out_dir = current_dir
